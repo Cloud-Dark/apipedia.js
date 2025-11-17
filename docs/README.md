@@ -16,11 +16,17 @@ Welcome to the documentation for the apipedia-waconsole library. This Node.js li
   - [telegramSendLocation()](api/telegram/send_location.md) - Send location message to Telegram
   - [telegramSendButtons()](api/telegram/send_buttons.md) - Send message with buttons to Telegram
   - [telegramSendDocument()](api/telegram/send_document.md) - Send document to Telegram
+- [Device Management Methods](api/device-management.md) - Session monitoring, contact verification, and webhook management
+  - [checkContactNumber()](api/device-management.md#checkcontactnumberdeviceid-phone) - Verify WhatsApp contact registration
+  - [getSessionStatus()](api/device-management.md#getsessionstatusdeviceid) - Check session authentication status
+  - [getLastWebhookUpdate()](api/device-management.md#getlastwebhookupdatedeviceid) - Retrieve last webhook message
+  - [getNewsLetterId()](api/device-management.md#getnewsletteriddeviceid) - Extract Newsletter ID for channels
 
 ### Examples
 - [Basic Usage](examples/basic-usage.md) - Getting started with the library
 - [WhatsApp Examples](examples/bulk-messaging.md) - Complete examples for WhatsApp bulk messaging
 - [Telegram Examples](examples/telegram/index.md) - Complete examples for Telegram messaging
+- [Device Management Examples](examples/device-management.md) - Complete examples for device management operations
 
 ### Testing
 - [Test Documentation](tests/index.md) - Information about the test suite and how to run tests
@@ -31,7 +37,13 @@ Welcome to the documentation for the apipedia-waconsole library. This Node.js li
 - Send messages with media attachments (images, documents, etc.) to WhatsApp
 - Bulk messaging capabilities (V1 and V2) for WhatsApp
 - Telegram messaging capabilities (text, images, locations, buttons, documents)
+- Device management features:
+  - Verify WhatsApp contact registration
+  - Check session authentication status
+  - Monitor webhook updates for debugging
+  - Extract Newsletter IDs for channel broadcasts
 - Support for file paths, URLs, and streams as media
+- Fluent chaining API for cross-platform operations
 - Proper error handling with detailed messages
 - Simple and intuitive API
 
