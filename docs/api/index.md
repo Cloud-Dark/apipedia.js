@@ -1,5 +1,7 @@
 # API Documentation
 
+> **Important:** All API endpoints and base URLs are defined in `index.js`. The URLs shown below are for reference only. The library automatically handles all API calls through the configured endpoints in the class constructor.
+
 ## WhatsApp Messaging APIs
 
 ### Individual Messaging API

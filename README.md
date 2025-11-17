@@ -351,205 +351,14 @@ Get the last receipt status of a message.
 
 ### Message Status Examples
 
-These methods correspond to the following API endpoints:
-
-**Get all message statuses:**
-```bash
-curl --location --request GET 'https://waconsole.apipedia.id/api/messages/status/all' \
-  --header 'Content-Type: application/json' \
-  --data '{
-     "appkey":"Insert your APP Key",
-     "authkey":"Insert your Auth Key",
-     "message_id":"MESSAGE_ID"
-  }'
-```
-
-**Get last message status:**
-```bash
-curl --location --request GET 'https://waconsole.apipedia.id/api/status/last' \
-  --header 'Content-Type: application/json' \
-  --data '{
-     "appkey":"Insert your APP Key",
-     "authkey":"Insert your Auth Key",
-     "message_id":"MESSAGE_ID"
-  }'
-```
-
-**Get last receipt status:**
-```bash
-curl --location --request GET 'https://waconsole.apipedia.id/api/messages/status/last/receipt' \
-  --header 'Content-Type: application/json' \
-  --data '{
-     "appkey":"Insert your APP Key",
-     "authkey":"Insert your Auth Key",
-     "message_id":"MESSAGE_ID"
-  }'
-```
+See the [API Documentation](docs/api/index.md) for complete endpoint details and cURL examples.
 
 ### Device and Session Management Methods
 
 #### checkContactNumber(deviceId, phone)
 Verify if a phone number is registered on WhatsApp.
 
-- `deviceId`: Device UUID (e.g., `7da1f5ba-81fb-4d5d-bbce-f407427cf364`)
-- `phone`: Phone number to check (e.g., `628998937095`)
-
-**cURL Example:**
-```bash
-curl --location --request POST 'https://waconsole.apipedia.id/api/device/contact/check' \
-  --form 'appkey="{your_app_key}"' \
-  --form 'authkey="{your_auth_key}"' \
-  --form 'device_id="{device_id}"' \
-  --form 'phone="{phone_number}"'
-```
-
-**Response Example:**
-```json
-{
-  "status": 200,
-  "success": true,
-  "message": "Contact exists.",
-  "data": {
-    "exists": true,
-    "phone": "628998937095@c.us"
-  }
-}
-```
-
-#### getSessionStatus(deviceId)
-Check the current status of a WhatsApp session.
-
-- `deviceId`: Device UUID (e.g., `7da1f5ba-81fb-4d5d-bbce-f407427cf364`)
-
-**cURL Example:**
-```bash
-curl --location --request POST 'https://waconsole.apipedia.id/api/device/session/status' \
-  --form 'appkey="{your_app_key}"' \
-  --form 'authkey="{your_auth_key}"' \
-  --form 'device_id="{device_id}"'
-```
-
-**Response Example:**
-```json
-{
-  "status": 200,
-  "success": true,
-  "message": "Session status retrieved",
-  "data": {
-    "connected": true,
-    "authenticated": true,
-    "phone": "6285179781798"
-  }
-}
-```
-
-#### getLastWebhookUpdate(deviceId)
-Retrieve the last webhook update/message received by the session.
-
-- `deviceId`: Device UUID (e.g., `7da1f5ba-81fb-4d5d-bbce-f407427cf364`)
-
-**cURL Example:**
-```bash
-curl --location --request POST 'https://waconsole.apipedia.id/api/device/webhook/last-update' \
-  --form 'appkey="{your_app_key}"' \
-  --form 'authkey="{your_auth_key}"' \
-  --form 'device_id="{device_id}"'
-```
-
-**Response Example (Last Message):**
-```json
-{
-  "success": true,
-  "message": "Last webhook update",
-  "data": {
-    "timestamp": 1762704949835,
-    "type": "message",
-    "data": {
-      "messages": [
-        {
-          "key": {
-            "remoteJid": "status@broadcast",
-            "fromMe": false,
-            "id": "3AC52239C3BF89C9DC29",
-            "participant": "628128283119@s.whatsapp.net"
-          },
-          "messageTimestamp": 1762704959,
-          "pushName": "Contact Name",
-          "broadcast": true,
-          "message": {
-            "conversation": "Message text"
-          }
-        }
-      ],
-      "type": "notify"
-    },
-    "formattedTime": "2025-11-09T16:15:49.835Z"
-  }
-}
-```
-
-**Tips:**
-- Use this endpoint to debug webhook messages
-- Shows the last received message and its metadata
-- Useful for testing and monitoring message flow
-
-#### getNewsLetterId(deviceId)
-Extract Newsletter ID from webhook updates for channel broadcasts.
-
-- `deviceId`: Device UUID (e.g., `7da1f5ba-81fb-4d5d-bbce-f407427cf364`)
-
-**cURL Example:**
-```bash
-curl --location --request POST 'https://waconsole.apipedia.id/api/device/webhook/newsletter-id' \
-  --form 'appkey="{your_app_key}"' \
-  --form 'authkey="{your_auth_key}"' \
-  --form 'device_id="{device_id}"'
-```
-
-**How to Get Your Newsletter ID:**
-1. Open your channels - Make sure you have an active WhatsApp Channel
-2. Send test message - Send or receive a test message in the channel
-3. Call this endpoint - Use the `/api/device/webhook/newsletter-id` endpoint above
-4. Find Newsletter ID - The response will automatically extract and show the Newsletter ID
-5. Copy and use - Copy the Newsletter ID for channel broadcasts
-
-**Response Example with Newsletter ID:**
-```json
-{
-  "success": true,
-  "message": "Newsletter ID extracted",
-  "data": {
-    "found": true,
-    "newsletter_id": "120362345678901234",
-    "remote_jid": "120362345678901234@newsletter",
-    "timestamp": 1762705396,
-    "message": "Newsletter test message"
-  }
-}
-```
-
-**Success Response Format:**
-```json
-{
-    "message_status": "Success",
-    "data": {
-        "from": "6281234567890",
-        "to": "6285123456789",
-        "id_user": 42,
-        "body": {
-            "text": "example message"
-        },
-        "status_code": 200
-    }
-}
-```
-
-### Device Management Methods
-
-#### checkContactNumber(deviceId, phone)
-Verify if a phone number is registered on WhatsApp.
-
-- `deviceId`: Your WhatsApp device UUID
+- `deviceId`: Device UUID
 - `phone`: Phone number to check in international format
 
 **JavaScript Example:**
@@ -563,131 +372,83 @@ const client = apipedia(
 );
 
 async function checkContact() {
-  try {
-    const response = await client.checkContactNumber(
-      process.env.APIPEDIA_DEVICE_ID,
-      process.env.PHONE_TO_CHECK
-    );
-
-    const result = response.getResult();
-    console.log('Contact exists:', result.data.exists);
-    console.log('WhatsApp JID:', result.data.phone);
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
+  const response = await client.checkContactNumber(
+    process.env.APIPEDIA_DEVICE_ID,
+    process.env.PHONE_TO_CHECK
+  );
+  console.log('Contact exists:', response.getResult().data.exists);
 }
 
 checkContact();
 ```
 
+For complete API endpoint details, see [Device Management API Documentation](docs/api/device-management.md).
+
 #### getSessionStatus(deviceId)
 Check the current authentication and connection status of a WhatsApp session.
 
-- `deviceId`: Your WhatsApp device UUID
+- `deviceId`: Device UUID
 
 **JavaScript Example:**
 ```javascript
-require('dotenv').config();
-const apipedia = require('apipedia.js');
-
-const client = apipedia(
-  process.env.APIPEDIA_APP_KEY,
-  process.env.APIPEDIA_AUTH_KEY
+const response = await client.getSessionStatus(
+  process.env.APIPEDIA_DEVICE_ID
 );
 
-async function checkSessionStatus() {
-  try {
-    const response = await client.getSessionStatus(
-      process.env.APIPEDIA_DEVICE_ID
-    );
-
-    const sessionData = response.getResult();
-    console.log('Connected:', sessionData.data.connected);
-    console.log('Authenticated:', sessionData.data.authenticated);
-    console.log('Phone:', sessionData.data.phone);
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
-
-checkSessionStatus();
+const { connected, authenticated, phone } = response.getResult().data;
+console.log('Connected:', connected);
+console.log('Authenticated:', authenticated);
+console.log('Phone:', phone);
 ```
+
+For complete API endpoint details, see [Device Management API Documentation](docs/api/device-management.md).
 
 #### getLastWebhookUpdate(deviceId)
 Retrieve the last webhook update/message received by the session. Useful for debugging and monitoring message flow.
 
-- `deviceId`: Your WhatsApp device UUID
+- `deviceId`: Device UUID
 
 **JavaScript Example:**
 ```javascript
-require('dotenv').config();
-const apipedia = require('apipedia.js');
-
-const client = apipedia(
-  process.env.APIPEDIA_APP_KEY,
-  process.env.APIPEDIA_AUTH_KEY
+const response = await client.getLastWebhookUpdate(
+  process.env.APIPEDIA_DEVICE_ID
 );
 
-async function getLastUpdate() {
-  try {
-    const response = await client.getLastWebhookUpdate(
-      process.env.APIPEDIA_DEVICE_ID
-    );
-
-    const webhookData = response.getResult();
-    console.log('Timestamp:', webhookData.data.timestamp);
-    console.log('Message Type:', webhookData.data.type);
-    console.log('Last Message:', webhookData.data.data);
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
-
-getLastUpdate();
+const webhookData = response.getResult();
+console.log('Timestamp:', webhookData.data.timestamp);
+console.log('Message Type:', webhookData.data.type);
+console.log('Last Message:', webhookData.data.data);
 ```
+
+For complete API endpoint details and response examples, see [Device Management API Documentation](docs/api/device-management.md).
 
 #### getNewsLetterId(deviceId)
 Extract Newsletter ID from webhook updates for WhatsApp Channel broadcasts.
 
-- `deviceId`: Your WhatsApp device UUID
+- `deviceId`: Device UUID
 
 **How to Get Your Newsletter ID:**
-1. Open your WhatsApp Channels - Make sure you have an active WhatsApp Channel
+1. Open your WhatsApp Channels - Make sure you have an active channel
 2. Send/receive a test message in the channel
-3. Call this endpoint to extract the Newsletter ID
-4. Copy the Newsletter ID for use in channel broadcasts
+3. Call this method to extract the Newsletter ID
+4. Copy the Newsletter ID for channel broadcasts
 
 **JavaScript Example:**
 ```javascript
-require('dotenv').config();
-const apipedia = require('apipedia.js');
-
-const client = apipedia(
-  process.env.APIPEDIA_APP_KEY,
-  process.env.APIPEDIA_AUTH_KEY
+const response = await client.getNewsLetterId(
+  process.env.APIPEDIA_DEVICE_ID
 );
 
-async function getNewsletterID() {
-  try {
-    const response = await client.getNewsLetterId(
-      process.env.APIPEDIA_DEVICE_ID
-    );
-
-    const newsletterData = response.getResult();
-    if (newsletterData.data.found) {
-      console.log('Newsletter ID:', newsletterData.data.newsletter_id);
-      console.log('Remote JID:', newsletterData.data.remote_jid);
-      console.log('Timestamp:', newsletterData.data.timestamp);
-    } else {
-      console.log('No newsletter found in webhook history');
-    }
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
+const newsletterData = response.getResult();
+if (newsletterData.data.found) {
+  console.log('Newsletter ID:', newsletterData.data.newsletter_id);
+  console.log('Remote JID:', newsletterData.data.remote_jid);
+} else {
+  console.log('No newsletter found');
 }
-
-getNewsletterID();
 ```
+
+For complete API endpoint details and response examples, see [Device Management API Documentation](docs/api/device-management.md).
 
 ### Device Management with Chaining
 

@@ -2,6 +2,8 @@
 
 This document provides examples for the message status API endpoints available in the Apipedia library.
 
+> **Important:** All API endpoints and base URLs are defined in `index.js`. The URLs shown below are for reference only. Use the library methods (getMessageStatusAll, getLastStatus, getLastReceiptStatus) instead of direct cURL calls.
+
 ## API Endpoints
 
 ### 1. Get All Message Statuses

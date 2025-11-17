@@ -50,14 +50,7 @@ async function checkContact() {
 checkContact();
 ```
 
-**cURL Example:**
-```bash
-curl --location --request POST 'https://waconsole.apipedia.id/api/device/contact/check' \
-  --form 'appkey="{your_app_key}"' \
-  --form 'authkey="{your_auth_key}"' \
-  --form 'device_id="{device_id}"' \
-  --form 'phone="{phone_number}"'
-```
+> **Note:** API endpoints are defined in `index.js`. This method uses the `/api/device/contact/check` endpoint with FormData.
 
 **Response:**
 ```json
@@ -111,13 +104,7 @@ async function checkSessionStatus() {
 checkSessionStatus();
 ```
 
-**cURL Example:**
-```bash
-curl --location --request POST 'https://waconsole.apipedia.id/api/device/session/status' \
-  --form 'appkey="{your_app_key}"' \
-  --form 'authkey="{your_auth_key}"' \
-  --form 'device_id="{device_id}"'
-```
+> **Note:** API endpoints are defined in `index.js`. This method uses the `/api/device/session/status` endpoint with FormData.
 
 **Response:**
 ```json
@@ -172,13 +159,7 @@ async function getLastUpdate() {
 getLastUpdate();
 ```
 
-**cURL Example:**
-```bash
-curl --location --request POST 'https://waconsole.apipedia.id/api/device/webhook/last-update' \
-  --form 'appkey="{your_app_key}"' \
-  --form 'authkey="{your_auth_key}"' \
-  --form 'device_id="{device_id}"'
-```
+> **Note:** API endpoints are defined in `index.js`. This method uses the `/api/device/webhook/last-update` endpoint with FormData.
 
 **Response:**
 ```json
@@ -261,13 +242,7 @@ async function getNewsletterID() {
 getNewsletterID();
 ```
 
-**cURL Example:**
-```bash
-curl --location --request POST 'https://waconsole.apipedia.id/api/device/webhook/newsletter-id' \
-  --form 'appkey="{your_app_key}"' \
-  --form 'authkey="{your_auth_key}"' \
-  --form 'device_id="{device_id}"'
-```
+> **Note:** API endpoints are defined in `index.js`. This method uses the `/api/device/webhook/newsletter-id` endpoint with FormData.
 
 **Response:**
 ```json
