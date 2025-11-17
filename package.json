@@ -1,6 +1,6 @@
 {
   "name": "apipedia.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "🚀 Official Apipedia.js - Complete Node.js library for Apipedia API: WhatsApp, Telegram, SMS, AI Chat with fluent chaining",
   "main": "index.js",
   "scripts": {
