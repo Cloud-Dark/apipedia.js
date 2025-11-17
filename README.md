@@ -16,39 +16,78 @@ npm install apipedia.js
 
 ## Quick Start
 
+First, set up your environment variables (see [Environment Variables](#environment-variables) section):
+
 ```javascript
+require('dotenv').config();
 const apipedia = require('apipedia.js');
 
-const client = apipedia('your-appkey', 'your-authkey');
+// Initialize with credentials from environment
+const client = apipedia(
+  process.env.APIPEDIA_APP_KEY,
+  process.env.APIPEDIA_AUTH_KEY
+);
 
 // Send a text message
-client.whatsapp('1234567890', 'Hello, World!');
+await client.whatsapp(
+  process.env.WHATSAPP_RECIPIENT,
+  'Hello, World!'
+);
 
 // Send a message with media file path
-client.whatsapp('1234567890', 'Check this out!', './path/to/image.jpg');
+await client.whatsapp(
+  process.env.WHATSAPP_RECIPIENT,
+  'Check this out!',
+  './path/to/image.jpg'
+);
 
 // Send a message with media URL
-client.whatsapp('1234567890', 'Check this out!', 'https://example.com/image.jpg');
+await client.whatsapp(
+  process.env.WHATSAPP_RECIPIENT,
+  'Check this out!',
+  'https://example.com/image.jpg'
+);
 
 // Send a message with media stream
 const fs = require('fs');
 const media = fs.createReadStream('path/to/image.jpg');
-client.whatsapp('1234567890', 'Check this out!', media);
+await client.whatsapp(
+  process.env.WHATSAPP_RECIPIENT,
+  'Check this out!',
+  media
+);
 
 // Send bulk messages (same message to multiple recipients)
-client.bulkV1(['628998937095', '6281615677582'], 'Same message to all recipients');
+await client.bulkV1(
+  ['628998937095', '6281615677582'],
+  'Same message to all recipients'
+);
 
-// Send bulk messages (different messages to multiple recipients) 
-client.bulkV2(['628998937095', '6281615677582'], ['Message for first', 'Message for second']);
+// Send bulk messages (different messages to multiple recipients)
+await client.bulkV2(
+  ['628998937095', '6281615677582'],
+  ['Message for first', 'Message for second']
+);
 
 // Send Telegram text message
-client.telegramSendMessage('368628054', 'Hello from Telegram Bot!');
+await client.telegramSendMessage(
+  process.env.TELEGRAM_RECIPIENT,
+  'Hello from Telegram Bot!'
+);
 
 // Send Telegram image
-client.telegramSendImage('368628054', 'https://example.com/photo.jpg', 'Photo caption');
+await client.telegramSendImage(
+  process.env.TELEGRAM_RECIPIENT,
+  'https://example.com/photo.jpg',
+  'Photo caption'
+);
 
 // Send Telegram location
-client.telegramSendLocation('368628054', -6.2088, 106.8456);
+await client.telegramSendLocation(
+  process.env.TELEGRAM_RECIPIENT,
+  -6.2088,
+  106.8456
+);
 
 // Send Telegram buttons
 const buttons = [
@@ -57,13 +96,26 @@ const buttons = [
     {"text": "Option 2", "callback_data": "option_2"}
   ]
 ];
-client.telegramSendButtons('368628054', 'Choose an option:', buttons);
+await client.telegramSendButtons(
+  process.env.TELEGRAM_RECIPIENT,
+  'Choose an option:',
+  buttons
+);
 
 // Send Telegram document
-client.telegramSendDocument('368628054', 'https://temp.apipedia.id/example/sample-1.pdf', 'Document caption', 'document.pdf');
+await client.telegramSendDocument(
+  process.env.TELEGRAM_RECIPIENT,
+  'https://temp.apipedia.id/example/sample-1.pdf',
+  'Document caption',
+  'document.pdf'
+);
 
 // Use AI Chat
-client.aiChat('Hello, how can you help me?', 'b33a2b7b-fd21-41af-92ee-268bcbccce49', 'json');
+await client.aiChat(
+  'Hello, how can you help me?',
+  process.env.AI_AGENT_ID,
+  'json'
+);
 ```
 
 ## AI Chat and Telegram Implementation Example
@@ -75,10 +127,10 @@ Here's a practical example using environment variables for security:
 require('dotenv').config();
 const apipedia = require('apipedia.js');
 
-// Initialize with your AI credentials from environment variables
+// Initialize with credentials from environment variables
 const client = apipedia(
-  process.env.APIPEDIA_AI_APPKEY || 'your-ai-appkey-here', 
-  process.env.APIPEDIA_AI_AUTHKEY || 'your-ai-authkey-here'
+  process.env.APIPEDIA_APP_KEY,
+  process.env.APIPEDIA_AUTH_KEY
 );
 
 async function exampleAIUsage() {
@@ -86,15 +138,15 @@ async function exampleAIUsage() {
     // Send a message to the AI Content Writing Assistant
     const response = await client.aiChat(
       'Hello, how can you help me?',
-      process.env.APIPEDIA_AI_AGENT_ID || 'b33a2b7b-fd21-41af-92ee-268bcbccce49',
+      process.env.AI_AGENT_ID,
       'json'
     );
-    
+
     console.log('AI Response:', response.getResult());
-    
+
     // Chain: Send the AI response to Telegram
     await response.toTelegram(
-      process.env.TEST_TELEGRAM_RECEIVER || '368628054', 
+      process.env.TELEGRAM_RECIPIENT,
       'AI Response: '
     );
   } catch (error) {
@@ -110,25 +162,25 @@ exampleAIUsage();
 require('dotenv').config();
 const apipedia = require('apipedia.js');
 
-// Initialize with your Telegram credentials from environment variables
+// Initialize with credentials from environment variables
 const client = apipedia(
-  process.env.APIPEDIA_TELEGRAM_APPKEY || 'your-telegram-appkey-here', 
-  process.env.APIPEDIA_TELEGRAM_AUTHKEY || 'your-telegram-authkey-here'
+  process.env.APIPEDIA_APP_KEY,
+  process.env.APIPEDIA_AUTH_KEY
 );
 
 async function exampleTelegramUsage() {
   try {
     // Send a message via Telegram
     const response = await client.telegramSendMessage(
-      process.env.TEST_TELEGRAM_RECEIVER || '368628054', 
+      process.env.TELEGRAM_RECIPIENT,
       'Hello from Telegram Bot!'
     );
-    
+
     console.log('Telegram Response:', response.getResult());
-    
+
     // Chain: Send the result to WhatsApp
     await response.toWhatsApp(
-      process.env.TEST_WHATSAPP_NUMBER || '6281234567890', 
+      process.env.WHATSAPP_RECIPIENT,
       'Telegram message sent: '
     );
   } catch (error) {
@@ -281,7 +333,423 @@ Update WhatsApp presence status.
 - `presence`: Presence type ('composing', 'recording', 'online', etc.)
 - `duration` (optional): Duration in seconds
 
-### Message Status Methods\n#### getMessageStatusAll(messageId)\nGet complete message status information.\n\n- `messageId`: ID of the message to check\n\n#### getLastStatus(messageId)\nGet the last status of a message.\n\n- `messageId`: ID of the message to check\n\n#### getLastReceiptStatus(messageId)\nGet the last receipt status of a message.\n\n- `messageId`: ID of the message to check\n\n### Message Status Examples\n\nThese methods correspond to the following API endpoints:\n\n**Get all message statuses:**\n```bash\ncurl --location --request GET 'https://waconsole.apipedia.id/api/messages/status/all' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n     \"appkey\":\"Insert your APP Key\",\n     \"authkey\":\"Insert your Auth Key\",\n     \"message_id\":\"MESSAGE_ID\"\n  }'\n```\n\n**Get last message status:**\n```bash\ncurl --location --request GET 'https://waconsole.apipedia.id/api/status/last' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n     \"appkey\":\"Insert your APP Key\",\n     \"authkey\":\"Insert your Auth Key\",\n     \"message_id\":\"MESSAGE_ID\"\n  }'\n```\n\n**Get last receipt status:**\n```bash\ncurl --location --request GET 'https://waconsole.apipedia.id/api/messages/status/last/receipt' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n     \"appkey\":\"Insert your APP Key\",\n     \"authkey\":\"Insert your Auth Key\",\n     \"message_id\":\"MESSAGE_ID\"\n  }'\n```
+### Message Status Methods
+#### getMessageStatusAll(messageId)
+Get complete message status information.
+
+- `messageId`: ID of the message to check
+
+#### getLastStatus(messageId)
+Get the last status of a message.
+
+- `messageId`: ID of the message to check
+
+#### getLastReceiptStatus(messageId)
+Get the last receipt status of a message.
+
+- `messageId`: ID of the message to check
+
+### Message Status Examples
+
+These methods correspond to the following API endpoints:
+
+**Get all message statuses:**
+```bash
+curl --location --request GET 'https://waconsole.apipedia.id/api/messages/status/all' \
+  --header 'Content-Type: application/json' \
+  --data '{
+     "appkey":"Insert your APP Key",
+     "authkey":"Insert your Auth Key",
+     "message_id":"MESSAGE_ID"
+  }'
+```
+
+**Get last message status:**
+```bash
+curl --location --request GET 'https://waconsole.apipedia.id/api/status/last' \
+  --header 'Content-Type: application/json' \
+  --data '{
+     "appkey":"Insert your APP Key",
+     "authkey":"Insert your Auth Key",
+     "message_id":"MESSAGE_ID"
+  }'
+```
+
+**Get last receipt status:**
+```bash
+curl --location --request GET 'https://waconsole.apipedia.id/api/messages/status/last/receipt' \
+  --header 'Content-Type: application/json' \
+  --data '{
+     "appkey":"Insert your APP Key",
+     "authkey":"Insert your Auth Key",
+     "message_id":"MESSAGE_ID"
+  }'
+```
+
+### Device and Session Management Methods
+
+#### checkContactNumber(deviceId, phone)
+Verify if a phone number is registered on WhatsApp.
+
+- `deviceId`: Device UUID (e.g., `7da1f5ba-81fb-4d5d-bbce-f407427cf364`)
+- `phone`: Phone number to check (e.g., `628998937095`)
+
+**cURL Example:**
+```bash
+curl --location --request POST 'https://waconsole.apipedia.id/api/device/contact/check' \
+  --form 'appkey="{your_app_key}"' \
+  --form 'authkey="{your_auth_key}"' \
+  --form 'device_id="{device_id}"' \
+  --form 'phone="{phone_number}"'
+```
+
+**Response Example:**
+```json
+{
+  "status": 200,
+  "success": true,
+  "message": "Contact exists.",
+  "data": {
+    "exists": true,
+    "phone": "628998937095@c.us"
+  }
+}
+```
+
+#### getSessionStatus(deviceId)
+Check the current status of a WhatsApp session.
+
+- `deviceId`: Device UUID (e.g., `7da1f5ba-81fb-4d5d-bbce-f407427cf364`)
+
+**cURL Example:**
+```bash
+curl --location --request POST 'https://waconsole.apipedia.id/api/device/session/status' \
+  --form 'appkey="{your_app_key}"' \
+  --form 'authkey="{your_auth_key}"' \
+  --form 'device_id="{device_id}"'
+```
+
+**Response Example:**
+```json
+{
+  "status": 200,
+  "success": true,
+  "message": "Session status retrieved",
+  "data": {
+    "connected": true,
+    "authenticated": true,
+    "phone": "6285179781798"
+  }
+}
+```
+
+#### getLastWebhookUpdate(deviceId)
+Retrieve the last webhook update/message received by the session.
+
+- `deviceId`: Device UUID (e.g., `7da1f5ba-81fb-4d5d-bbce-f407427cf364`)
+
+**cURL Example:**
+```bash
+curl --location --request POST 'https://waconsole.apipedia.id/api/device/webhook/last-update' \
+  --form 'appkey="{your_app_key}"' \
+  --form 'authkey="{your_auth_key}"' \
+  --form 'device_id="{device_id}"'
+```
+
+**Response Example (Last Message):**
+```json
+{
+  "success": true,
+  "message": "Last webhook update",
+  "data": {
+    "timestamp": 1762704949835,
+    "type": "message",
+    "data": {
+      "messages": [
+        {
+          "key": {
+            "remoteJid": "status@broadcast",
+            "fromMe": false,
+            "id": "3AC52239C3BF89C9DC29",
+            "participant": "628128283119@s.whatsapp.net"
+          },
+          "messageTimestamp": 1762704959,
+          "pushName": "Contact Name",
+          "broadcast": true,
+          "message": {
+            "conversation": "Message text"
+          }
+        }
+      ],
+      "type": "notify"
+    },
+    "formattedTime": "2025-11-09T16:15:49.835Z"
+  }
+}
+```
+
+**Tips:**
+- Use this endpoint to debug webhook messages
+- Shows the last received message and its metadata
+- Useful for testing and monitoring message flow
+
+#### getNewsLetterId(deviceId)
+Extract Newsletter ID from webhook updates for channel broadcasts.
+
+- `deviceId`: Device UUID (e.g., `7da1f5ba-81fb-4d5d-bbce-f407427cf364`)
+
+**cURL Example:**
+```bash
+curl --location --request POST 'https://waconsole.apipedia.id/api/device/webhook/newsletter-id' \
+  --form 'appkey="{your_app_key}"' \
+  --form 'authkey="{your_auth_key}"' \
+  --form 'device_id="{device_id}"'
+```
+
+**How to Get Your Newsletter ID:**
+1. Open your channels - Make sure you have an active WhatsApp Channel
+2. Send test message - Send or receive a test message in the channel
+3. Call this endpoint - Use the `/api/device/webhook/newsletter-id` endpoint above
+4. Find Newsletter ID - The response will automatically extract and show the Newsletter ID
+5. Copy and use - Copy the Newsletter ID for channel broadcasts
+
+**Response Example with Newsletter ID:**
+```json
+{
+  "success": true,
+  "message": "Newsletter ID extracted",
+  "data": {
+    "found": true,
+    "newsletter_id": "120362345678901234",
+    "remote_jid": "120362345678901234@newsletter",
+    "timestamp": 1762705396,
+    "message": "Newsletter test message"
+  }
+}
+```
+
+**Success Response Format:**
+```json
+{
+    "message_status": "Success",
+    "data": {
+        "from": "6281234567890",
+        "to": "6285123456789",
+        "id_user": 42,
+        "body": {
+            "text": "example message"
+        },
+        "status_code": 200
+    }
+}
+```
+
+### Device Management Methods
+
+#### checkContactNumber(deviceId, phone)
+Verify if a phone number is registered on WhatsApp.
+
+- `deviceId`: Your WhatsApp device UUID
+- `phone`: Phone number to check in international format
+
+**JavaScript Example:**
+```javascript
+require('dotenv').config();
+const apipedia = require('apipedia.js');
+
+const client = apipedia(
+  process.env.APIPEDIA_APP_KEY,
+  process.env.APIPEDIA_AUTH_KEY
+);
+
+async function checkContact() {
+  try {
+    const response = await client.checkContactNumber(
+      process.env.APIPEDIA_DEVICE_ID,
+      process.env.PHONE_TO_CHECK
+    );
+
+    const result = response.getResult();
+    console.log('Contact exists:', result.data.exists);
+    console.log('WhatsApp JID:', result.data.phone);
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+checkContact();
+```
+
+#### getSessionStatus(deviceId)
+Check the current authentication and connection status of a WhatsApp session.
+
+- `deviceId`: Your WhatsApp device UUID
+
+**JavaScript Example:**
+```javascript
+require('dotenv').config();
+const apipedia = require('apipedia.js');
+
+const client = apipedia(
+  process.env.APIPEDIA_APP_KEY,
+  process.env.APIPEDIA_AUTH_KEY
+);
+
+async function checkSessionStatus() {
+  try {
+    const response = await client.getSessionStatus(
+      process.env.APIPEDIA_DEVICE_ID
+    );
+
+    const sessionData = response.getResult();
+    console.log('Connected:', sessionData.data.connected);
+    console.log('Authenticated:', sessionData.data.authenticated);
+    console.log('Phone:', sessionData.data.phone);
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+checkSessionStatus();
+```
+
+#### getLastWebhookUpdate(deviceId)
+Retrieve the last webhook update/message received by the session. Useful for debugging and monitoring message flow.
+
+- `deviceId`: Your WhatsApp device UUID
+
+**JavaScript Example:**
+```javascript
+require('dotenv').config();
+const apipedia = require('apipedia.js');
+
+const client = apipedia(
+  process.env.APIPEDIA_APP_KEY,
+  process.env.APIPEDIA_AUTH_KEY
+);
+
+async function getLastUpdate() {
+  try {
+    const response = await client.getLastWebhookUpdate(
+      process.env.APIPEDIA_DEVICE_ID
+    );
+
+    const webhookData = response.getResult();
+    console.log('Timestamp:', webhookData.data.timestamp);
+    console.log('Message Type:', webhookData.data.type);
+    console.log('Last Message:', webhookData.data.data);
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+getLastUpdate();
+```
+
+#### getNewsLetterId(deviceId)
+Extract Newsletter ID from webhook updates for WhatsApp Channel broadcasts.
+
+- `deviceId`: Your WhatsApp device UUID
+
+**How to Get Your Newsletter ID:**
+1. Open your WhatsApp Channels - Make sure you have an active WhatsApp Channel
+2. Send/receive a test message in the channel
+3. Call this endpoint to extract the Newsletter ID
+4. Copy the Newsletter ID for use in channel broadcasts
+
+**JavaScript Example:**
+```javascript
+require('dotenv').config();
+const apipedia = require('apipedia.js');
+
+const client = apipedia(
+  process.env.APIPEDIA_APP_KEY,
+  process.env.APIPEDIA_AUTH_KEY
+);
+
+async function getNewsletterID() {
+  try {
+    const response = await client.getNewsLetterId(
+      process.env.APIPEDIA_DEVICE_ID
+    );
+
+    const newsletterData = response.getResult();
+    if (newsletterData.data.found) {
+      console.log('Newsletter ID:', newsletterData.data.newsletter_id);
+      console.log('Remote JID:', newsletterData.data.remote_jid);
+      console.log('Timestamp:', newsletterData.data.timestamp);
+    } else {
+      console.log('No newsletter found in webhook history');
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+getNewsletterID();
+```
+
+### Device Management with Chaining
+
+All device management methods support fluent chaining, allowing you to forward results to other platforms:
+
+**JavaScript Example:**
+```javascript
+require('dotenv').config();
+const apipedia = require('apipedia.js');
+
+const client = apipedia(
+  process.env.APIPEDIA_APP_KEY,
+  process.env.APIPEDIA_AUTH_KEY
+);
+
+async function deviceManagementWithChaining() {
+  try {
+    // Check session status and forward result to WhatsApp
+    await client.getSessionStatus(process.env.APIPEDIA_DEVICE_ID)
+                .toWhatsApp(process.env.WHATSAPP_RECIPIENT, 'Session Status: ');
+
+    // Get last webhook update and forward to multiple platforms
+    await client.getLastWebhookUpdate(process.env.APIPEDIA_DEVICE_ID)
+                .toWhatsApp(process.env.WHATSAPP_RECIPIENT, 'Last Update: ')
+                .toTelegram(process.env.TELEGRAM_RECIPIENT, 'Update: ');
+
+    // Extract newsletter ID and send via Telegram
+    await client.getNewsLetterId(process.env.APIPEDIA_DEVICE_ID)
+                .toTelegram(process.env.TELEGRAM_RECIPIENT, 'Newsletter ID: ');
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+deviceManagementWithChaining();
+```
+
+### Environment Variables Setup
+
+Create a `.env` file in your project root with the following variables for device management:
+
+```bash
+# Apipedia Authentication
+APIPEDIA_APP_KEY=your-app-key-here
+APIPEDIA_AUTH_KEY=your-auth-key-here
+
+# Device Management
+APIPEDIA_DEVICE_ID=your-device-uuid-here
+
+# WhatsApp & Telegram Recipients
+WHATSAPP_RECIPIENT=your-whatsapp-number
+TELEGRAM_RECIPIENT=your-telegram-chat-id
+
+# Contact Verification
+PHONE_TO_CHECK=phone-number-to-verify
+```
+
+Never commit your `.env` file to version control. Add it to `.gitignore`:
+
+```bash
+echo ".env" >> .gitignore
+```
 
 ### Chainable Cross-Platform Methods
 #### toWhatsApp(to, prefix = '')
@@ -306,59 +774,82 @@ Forward the previous result to SMS.
 
 ### 🔗 Revolutionary Fluent Chaining
 ```javascript
+require('dotenv').config();
+
 // ✨ NEW! Perfect chaining syntax - exactly what you wanted!
 await client
-  .aiChat('Generate a motivational quote', 'agent-id', 'text')
-  .toWhatsApp('6281234567890', '💪 Motivation: ')
-  .toTelegram('368628054', '⚡ Power up: ')
-  .toSMS('6281234567890', '📱 Daily dose: ');
+  .aiChat('Generate a motivational quote', process.env.AI_AGENT_ID, 'text')
+  .toWhatsApp(process.env.WHATSAPP_RECIPIENT, '💪 Motivation: ')
+  .toTelegram(process.env.TELEGRAM_RECIPIENT, '⚡ Power up: ')
+  .toSMS(process.env.WHATSAPP_RECIPIENT, '📱 Daily dose: ');
 
 // 🚀 Extreme long chains work perfectly!
 await client
-  .aiChat('Create weather report', 'agent-id')
-  .toWhatsApp('6281234567890', '🌤️ WeatherApp: ')
-  .toTelegram('368628054', '⛅ TeleWeather: ')
-  .toSMS('6281234567890', '🌡️ SMSWeather: ')
-  .toWhatsApp('6289876543210', '📱 Share: ')
-  .toTelegram('987654321', '💬 Forward: ');
+  .aiChat('Create weather report', process.env.AI_AGENT_ID)
+  .toWhatsApp(process.env.WHATSAPP_RECIPIENT, '🌤️ WeatherApp: ')
+  .toTelegram(process.env.TELEGRAM_RECIPIENT, '⛅ TeleWeather: ')
+  .toSMS(process.env.WHATSAPP_RECIPIENT, '🌡️ SMSWeather: ')
+  .toWhatsApp(process.env.WHATSAPP_RECIPIENT_2, '📱 Share: ')
+  .toTelegram(process.env.TELEGRAM_RECIPIENT_2, '💬 Forward: ');
 ```
 
 ### Chaining Multiple Operations
 ```javascript
+require('dotenv').config();
+
 // Get profile, then send to multiple platforms
 await client.getProfile()
-             .toWhatsApp('6281234567890', 'My Profile: ')
-             .toTelegram('368628054', 'Account Info: ');
+             .toWhatsApp(process.env.WHATSAPP_RECIPIENT, 'My Profile: ')
+             .toTelegram(process.env.TELEGRAM_RECIPIENT, 'Account Info: ');
 
 // Check message status and forward
 await client.getLastStatus('message-id')
-             .toSMS('6281234567890', 'Message Status: ');
+             .toSMS(process.env.WHATSAPP_RECIPIENT, 'Message Status: ');
 ```
 
 ### Presence Management
 ```javascript
+require('dotenv').config();
+
 // Set typing status for 10 seconds
-await client.updatePresence('6281234567890', 'composing', 10);
+await client.updatePresence(process.env.WHATSAPP_RECIPIENT, 'composing', 10);
 
 // Set recording status
-await client.updatePresence('6281234567890', 'recording');
+await client.updatePresence(process.env.WHATSAPP_RECIPIENT, 'recording');
 ```
 
 ## Environment Variables
 
-For security, credentials should be stored in environment variables rather than hardcoded. Create a `.env` file in your project root:
+For security, credentials should be stored in environment variables rather than hardcoded.
 
+### Setup Instructions
+
+1. **Copy the example file:**
 ```bash
-# Copy from .env.example and fill in your actual keys
-APIPEDIA_APP_KEY=your-app-key-here
-APIPEDIA_AUTH_KEY=your-auth-key-here
-TEST_WHATSAPP_NUMBER=628998937095
-TEST_TELEGRAM_RECEIVER=368628054
-AI_AGENT_ID=your-ai-agent-id-here
+cp .env.example .env
 ```
 
-Then use environment variables in your code:
+2. **Edit `.env` with your credentials:**
+```bash
+# Apipedia Authentication (REQUIRED)
+APIPEDIA_APP_KEY=your-app-key-here
+APIPEDIA_AUTH_KEY=your-auth-key-here
 
+# Device Management (Optional)
+APIPEDIA_DEVICE_ID=your-device-uuid-here
+
+# Recipients for Testing/Usage (Optional)
+TEST_WHATSAPP_NUMBER=your-whatsapp-number
+TEST_TELEGRAM_RECEIVER=your-telegram-chat-id
+WHATSAPP_RECIPIENT=recipient-whatsapp-number
+TELEGRAM_RECIPIENT=recipient-telegram-chat-id
+
+# AI & Other Services (Optional)
+AI_AGENT_ID=your-ai-agent-id-here
+PHONE_TO_CHECK=phone-number-to-verify
+```
+
+3. **Use environment variables in your code:**
 ```javascript
 require('dotenv').config();
 
@@ -366,7 +857,26 @@ const client = apipedia(
   process.env.APIPEDIA_APP_KEY,
   process.env.APIPEDIA_AUTH_KEY
 );
+
+// All sensitive values should come from environment
+const deviceId = process.env.APIPEDIA_DEVICE_ID;
+const phoneNumber = process.env.PHONE_TO_CHECK;
+const recipientWhatsApp = process.env.WHATSAPP_RECIPIENT;
+const recipientTelegram = process.env.TELEGRAM_RECIPIENT;
 ```
+
+### Security Best Practices
+
+- ✅ **Do:** Store all credentials in `.env`
+- ✅ **Do:** Add `.env` to `.gitignore`
+- ✅ **Do:** Use different credentials for dev, staging, and production
+- ✅ **Do:** Rotate credentials regularly
+- ❌ **Don't:** Commit `.env` to version control
+- ❌ **Don't:** Hardcode credentials in your code
+- ❌ **Don't:** Share your `.env` file or credentials
+- ❌ **Don't:** Log or print sensitive values
+
+### See `.env.example` for all available variables
 
 ## 🧪 Testing
 
@@ -404,16 +914,22 @@ The automatic publishing workflow is defined in `.github/workflows/npm-publish-s
 The library now supports the **exact syntax you requested**:
 
 ```javascript
+require('dotenv').config();
+
 // ✅ This works perfectly!
-client.aiChat('message').toWhatsApp('123').toTelegram('456').toSMS('789');
+await client
+  .aiChat('message', process.env.AI_AGENT_ID)
+  .toWhatsApp(process.env.WHATSAPP_RECIPIENT, '📱 WA: ')
+  .toTelegram(process.env.TELEGRAM_RECIPIENT, '💬 TG: ')
+  .toSMS(process.env.WHATSAPP_RECIPIENT, '📨 SMS: ');
 
 // ✅ Even extreme chains work flawlessly!
-client
-  .aiChat('Create content', 'agent-id')
-  .toWhatsApp('111', '📱 WA: ')
-  .toTelegram('222', '💬 TG: ')
-  .toSMS('333', '📨 SMS: ')
-  .toWhatsApp('444', '🔄 Share: ')
-  .toTelegram('555', '⚡ Forward: ')
-  .toSMS('666', '📤 Broadcast: ');
+await client
+  .aiChat('Create content', process.env.AI_AGENT_ID)
+  .toWhatsApp(process.env.WHATSAPP_RECIPIENT, '📱 WA: ')
+  .toTelegram(process.env.TELEGRAM_RECIPIENT, '💬 TG: ')
+  .toSMS(process.env.WHATSAPP_RECIPIENT, '📨 SMS: ')
+  .toWhatsApp(process.env.WHATSAPP_RECIPIENT_2, '🔄 Share: ')
+  .toTelegram(process.env.TELEGRAM_RECIPIENT_2, '⚡ Forward: ')
+  .toSMS(process.env.WHATSAPP_RECIPIENT_2, '📤 Broadcast: ');
 ```

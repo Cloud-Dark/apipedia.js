@@ -17,7 +17,8 @@ class Apipedia {
     this.presenceBaseURL = 'https://waconsole.apipedia.id/api/presence';
     this.messagesBaseURL = 'https://waconsole.apipedia.id/api/messages';
     this.statusBaseURL = 'https://waconsole.apipedia.id/api/status';
-    
+    this.deviceBaseURL = 'https://waconsole.apipedia.id/api/device';
+
     // For chainable API
     this.result = null;
   }
@@ -744,6 +745,124 @@ class Apipedia {
           'Content-Type': 'application/json'
         },
         data: data
+      });
+      this.result = response.data;
+      return this; // For chaining
+    } catch (error) {
+      // More detailed error handling
+      if (error.response) {
+        // Server responded with error status
+        throw new Error(`API Error: ${error.response.status} - ${error.response.data?.message || error.response.statusText}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        throw new Error(`Network Error: No response received from API`);
+      } else {
+        // Something else happened
+        throw new Error(`Request Error: ${error.message}`);
+      }
+    }
+  }
+
+  // Device and Session Management Methods
+  async checkContactNumber(deviceId, phone) {
+    const formData = new FormData();
+    formData.append('appkey', this.appkey);
+    formData.append('authkey', this.authkey);
+    formData.append('device_id', deviceId);
+    formData.append('phone', phone);
+
+    try {
+      const response = await axios.post(`${this.deviceBaseURL}/contact/check`, formData, {
+        headers: {
+          ...formData.getHeaders()
+        }
+      });
+      this.result = response.data;
+      return this; // For chaining
+    } catch (error) {
+      // More detailed error handling
+      if (error.response) {
+        // Server responded with error status
+        throw new Error(`API Error: ${error.response.status} - ${error.response.data?.message || error.response.statusText}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        throw new Error(`Network Error: No response received from API`);
+      } else {
+        // Something else happened
+        throw new Error(`Request Error: ${error.message}`);
+      }
+    }
+  }
+
+  async getSessionStatus(deviceId) {
+    const formData = new FormData();
+    formData.append('appkey', this.appkey);
+    formData.append('authkey', this.authkey);
+    formData.append('device_id', deviceId);
+
+    try {
+      const response = await axios.post(`${this.deviceBaseURL}/session/status`, formData, {
+        headers: {
+          ...formData.getHeaders()
+        }
+      });
+      this.result = response.data;
+      return this; // For chaining
+    } catch (error) {
+      // More detailed error handling
+      if (error.response) {
+        // Server responded with error status
+        throw new Error(`API Error: ${error.response.status} - ${error.response.data?.message || error.response.statusText}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        throw new Error(`Network Error: No response received from API`);
+      } else {
+        // Something else happened
+        throw new Error(`Request Error: ${error.message}`);
+      }
+    }
+  }
+
+  async getLastWebhookUpdate(deviceId) {
+    const formData = new FormData();
+    formData.append('appkey', this.appkey);
+    formData.append('authkey', this.authkey);
+    formData.append('device_id', deviceId);
+
+    try {
+      const response = await axios.post(`${this.deviceBaseURL}/webhook/last-update`, formData, {
+        headers: {
+          ...formData.getHeaders()
+        }
+      });
+      this.result = response.data;
+      return this; // For chaining
+    } catch (error) {
+      // More detailed error handling
+      if (error.response) {
+        // Server responded with error status
+        throw new Error(`API Error: ${error.response.status} - ${error.response.data?.message || error.response.statusText}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        throw new Error(`Network Error: No response received from API`);
+      } else {
+        // Something else happened
+        throw new Error(`Request Error: ${error.message}`);
+      }
+    }
+  }
+
+  async getNewsLetterId(deviceId) {
+    const formData = new FormData();
+    formData.append('appkey', this.appkey);
+    formData.append('authkey', this.authkey);
+    formData.append('device_id', deviceId);
+
+    try {
+      const response = await axios.post(`${this.deviceBaseURL}/webhook/newsletter-id`, formData, {
+        headers: {
+          ...formData.getHeaders()
+        }
       });
       this.result = response.data;
       return this; // For chaining
