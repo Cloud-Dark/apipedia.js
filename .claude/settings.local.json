@@ -9,7 +9,14 @@
       "Bash(git push:*)",
       "Bash(git commit:*)",
       "Bash(npm test)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(if grep -q \"39QP5QQh3wLhl80zTl33ZjqBqc2AmsuHCfAlv0rwr5XrmZfofC\\|d2b2452d-91fc-4571-bfcf-31929cbf65f1\\|c6b6c7a4-604c-42b6-80c3-ea680587b460\\|6285179781798\" \"D:\\poject\\apipedia.js\\README.md\")",
+      "Bash(then)",
+      "Bash(exit 1)",
+      "Bash(else)",
+      "Bash(fi)",
+      "Bash(if [ -f \"D:\\poject\\apipedia.js\\.env.example\" ])",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
